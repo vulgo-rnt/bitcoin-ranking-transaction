@@ -1,16 +1,24 @@
-import mempoolJS from "@mempool/mempool.js";
+const txid = document.querySelector("#txid").value;
+const confirmations = document.querySelector("#confirm").value;
 
-const init = async () => {
-  const {
-    bitcoin: { transactions },
-  } = mempoolJS({
-    hostname: "mempoolhqx4isw62xs7abwphsq7ldayuidyx2v2oethdhhj6mlo2r6ad.onion",
-  });
+chrome.runtime.onInstalled.addListener(async () => {
+  await chrome.alarms.create("fecth", { periodInMinutes: 0.2 });
+});
 
-  const txid =
-    "52538217af08b4dfa6c7b19aac4b67dd0293521cbc2cb0acf30289d3bf9fa31c";
-  const txStatus = await transactions.getTxStatus({ txid });
-  console.log(txStatus);
-};
+document.querySelector("#btnAlarm").addEventListener("click", () => {
+  createFetchInterval();
+});
 
-init();
+function createFetchInterval() {}
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "fecth") {
+    console.log("...");
+  }
+});
+
+async function findConfirmations() {
+  const res = await fetch(
+    `https://api.blockcypher.com/v1/btc/main/txs/${txid}`
+  );
+  return res.data.confirmations;
+}

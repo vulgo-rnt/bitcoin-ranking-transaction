@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Watch BTC Tx",
+  "version": "1.0",
+  "description": "Observes your bitcoin transaction and informs you when it is confirmed",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": ["activeTab", "alarms"],
+  "background": {
+    "scripts": ["index.js"],
+    "persistent": false
+  }
+}
