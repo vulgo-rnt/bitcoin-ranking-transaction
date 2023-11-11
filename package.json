@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cryptoapis": "^1.13.0",
-    "dotenv": "^16.3.1"
+    "@mempool/mempool.js": "^2.3.0"
   }
 }

@@ -1,23 +1,16 @@
-import Cryptoapis from "cryptoapis";
-import "dotenv/config";
+import mempoolJS from "@mempool/mempool.js";
 
-const defaultClient = Cryptoapis.ApiClient.instance;
+const init = async () => {
+  const {
+    bitcoin: { transactions },
+  } = mempoolJS({
+    hostname: "mempoolhqx4isw62xs7abwphsq7ldayuidyx2v2oethdhhj6mlo2r6ad.onion",
+  });
 
-const ApiKey = defaultClient.authentications["ApiKey"];
-ApiKey.apiKey = process.env.API_KEY;
+  const txid =
+    "52538217af08b4dfa6c7b19aac4b67dd0293521cbc2cb0acf30289d3bf9fa31c";
+  const txStatus = await transactions.getTxStatus({ txid });
+  console.log(txStatus);
+};
 
-const apiInstance = new Cryptoapis.UnifiedEndpointsApi();
-const blockchain = "bitcoin";
-const network = "testnet";
-const transactionId = process.argv[2];
-
-apiInstance
-  .getTransactionDetailsByTransactionID(blockchain, network, transactionId)
-  .then(
-    (data) => {
-      console.log(data);
-    },
-    (error) => {
-      console.error(error);
-    }
-  );
+init();
