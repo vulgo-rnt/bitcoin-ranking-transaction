@@ -8,7 +8,7 @@
   },
   "permissions": ["activeTab", "alarms"],
   "background": {
-    "scripts": ["index.js"],
-    "persistent": false
+    "service_worker": "service_worker.js",
+    "type": "module"
   }
 }
