@@ -4,3 +4,6 @@ document.querySelector("form").addEventListener("submit", (event) => {
   const confirmations = document.querySelector("#confirm").value;
   chrome.runtime.sendMessage({ txid, confirmations });
 });
+chrome.runtime.onMessage.addListener(({ response }) => {
+  alert(response);
+});

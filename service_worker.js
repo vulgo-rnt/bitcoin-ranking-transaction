@@ -7,7 +7,9 @@ function checkConfirmations(txid, confirmations) {
     .then((data) => data.json())
     .then((data) => {
       if (data.confirmations >= confirmations) {
-        console.log("BTC TX SUCESSFULLY");
+        chrome.runtime.sendMessage({
+          response: `BTC TX SUCESSFULLY with ${data.confirmations} confirmations.`,
+        });
       } else {
         createWs(txid, confirmations);
       }
@@ -22,6 +24,7 @@ function createWs(txid, confirmations) {
   ws.onmessage = (event) => {
     const tx = JSON.parse(event.data);
     console.log(tx);
+    chrome.runtime.sendMessage({ response: "BTC TX SUCESSFULLY" });
     ws.close();
   };
   ws.onopen = () => {
