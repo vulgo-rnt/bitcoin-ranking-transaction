@@ -25,7 +25,6 @@ function createWs(txid, confirmations) {
     const tx = JSON.parse(event.data);
     console.log(tx);
     chrome.runtime.sendMessage({ response: "BTC TX SUCESSFULLY" });
-    ws.close();
   };
   ws.onopen = () => {
     ws.send(
