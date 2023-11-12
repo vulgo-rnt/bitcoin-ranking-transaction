@@ -22,6 +22,7 @@ function createWs(txid, confirmations) {
   ws.onmessage = (event) => {
     const tx = JSON.parse(event.data);
     console.log(tx);
+    ws.close();
   };
   ws.onopen = () => {
     ws.send(
