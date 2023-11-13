@@ -4,11 +4,11 @@
   "version": "1.0",
   "description": "Observes your bitcoin transaction and informs you when it is confirmed",
   "action": {
-    "default_popup": "form/index.html"
+    "default_popup": "form/index.html",
+    "default_icon": "icons/index.png"
   },
   "permissions": ["activeTab", "notifications"],
   "background": {
-    "service_worker": "service-worker.js",
-    "type": "module"
+    "service_worker": "service-worker.js"
   }
 }

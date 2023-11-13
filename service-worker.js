@@ -42,7 +42,7 @@ function createWs(txid, confirmations) {
   };
 
   ws.onclose = (event) => {
-    console.log("Connection WebSocket closed:", event.code, event.reason);
+    console.log("Connection WebSocket closed:", event.code);
   };
 }
 
