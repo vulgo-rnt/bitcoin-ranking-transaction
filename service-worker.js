@@ -7,7 +7,7 @@ function checkConfirmations(txid, confirmations) {
     .then((data) => data.json())
     .then((data) => {
       if (data.confirmations >= confirmations) {
-        window.open("./alarm/index.html");
+        //window.open("./alarm/index.html");
       } else {
         createWs(txid, confirmations);
       }
