@@ -7,11 +7,20 @@ form {
     margin:20px;
     box-sizing: border-box;
 }
-button{
-        appearance: none;
-        border: 0;
-        border-radius: 2px;
-}
+button {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #0078d7;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #005a9e;
+  }
 label{
     position: relative;
 }
