@@ -15,7 +15,6 @@ function checkConfirmations(txid, confirmations) {
 }
 
 function createWs(txid, confirmations) {
-  if (WebSocket.OPEN) return;
   const ws = new WebSocket(
     `wss://socket.blockcypher.com/v1/btc/main?token=0a05df34698542dbba64d037419d3a5b`
   );
