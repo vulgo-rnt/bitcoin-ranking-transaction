@@ -1,3 +1,5 @@
+let ws;
+
 chrome.runtime.onMessage.addListener(({ txid, confirmations }) => {
   checkConfirmations(txid, confirmations);
 });
@@ -7,7 +9,7 @@ function checkConfirmations(txid, confirmations) {
     .then((data) => data.json())
     .then((data) => {
       if (data.confirmations >= confirmations) {
-        //window.open("./alarm/index.html");
+        sendMessageNotification(data.confirmations);
       } else {
         createWs(txid, confirmations);
       }
@@ -15,16 +17,16 @@ function checkConfirmations(txid, confirmations) {
 }
 
 function createWs(txid, confirmations) {
-  const ws = new WebSocket(
+  if (ws?.readyState === WebSocket.OPEN) return;
+
+  ws = new WebSocket(
     `wss://socket.blockcypher.com/v1/btc/main?token=0a05df34698542dbba64d037419d3a5b`
   );
 
   ws.onmessage = (event) => {
     const tx = JSON.parse(event.data);
-    console.log(tx);
-    chrome.runtime.sendMessage({
-      response: `BTC TX SUCESSFULLY : ${tx.confirmations} confirmations.`,
-    });
+    sendMessageNotification(tx.confirmations);
+    ws.close();
   };
   ws.onopen = () => {
     ws.send(
@@ -42,4 +44,11 @@ function createWs(txid, confirmations) {
   ws.onclose = (event) => {
     console.log("Connection WebSocket closed:", event.code, event.reason);
   };
+}
+
+function sendMessageNotification(confimations) {
+  const options = {
+    body: `Confirmations : ${confimations}`,
+  };
+  self.registration.showNotification("BTC TX SUCESSFULLY", options);
 }
