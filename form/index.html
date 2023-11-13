@@ -5,12 +5,15 @@
   </head>
   <body>
     <form>
-      <label>Tx-Id: <input id="txid" type="text" required /></label>
       <label
-        >Confirmations:
+        ><p>Tx-Id:</p>
+        <input id="txid" type="text" required
+      /></label>
+      <label
+        ><p>Confirmations:</p>
         <input id="confirm" type="number" max="10" min="1" value="6" required />
       </label>
-      <button>Create Alarm</button>
+      <button>Notification</button>
     </form>
 
     <script src="submit.js"></script>

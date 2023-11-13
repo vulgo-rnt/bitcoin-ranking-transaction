@@ -1,3 +1,21 @@
+body{
+    margin:0
+}
+
 form {
     display: flex;
+    margin:20px;
+    box-sizing: border-box;
+}
+button{
+        appearance: none;
+        border: 0;
+        border-radius: 2px;
+}
+label{
+    position: relative;
+}
+p{
+    position: absolute;
+    bottom:2px;
 }
