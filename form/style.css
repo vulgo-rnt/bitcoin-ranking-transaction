@@ -6,7 +6,7 @@ form {
   display: flex;
   margin: 10px;
   width: 375px;
-  height: 100px;
+  height: 90px;
   box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
@@ -61,4 +61,12 @@ input:valid ~ span {
 }
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
+}
+footer {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  background-color: aliceblue;
+  border-top: 1px solid rgba(0, 0, 0, 0.171);
+  padding: 8px 0;
 }
