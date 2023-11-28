@@ -6,6 +6,7 @@ form {
   display: flex;
   margin: 10px;
   width: 375px;
+  height: 100px;
   box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
@@ -46,7 +47,7 @@ div {
 span {
   position: absolute;
   left: 0;
-  padding: 10px;
+  padding: 8px;
   pointer-events: none;
   font-size: 15px;
   transition: 0.5s;
@@ -57,4 +58,7 @@ input:valid ~ span {
   font-size: 10px;
   padding: 0 8px;
   background-color: white;
+}
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
 }
