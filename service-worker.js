@@ -10,7 +10,9 @@ function checkConfirmations(txid, confirmations) {
   fetch(`https://api.blockcypher.com/v1/btc/main/txs/${txid}`)
     .then((data) => data.json())
     .then((data) => {
-      if (data.confirmations >= confirmations) {
+      if (data.error) {
+        chrome.runtime.sendMessage({ error: data.error });
+      } else if (data.confirmations >= confirmations) {
         sendMessageNotification(data);
       } else {
         createWs(txid, confirmations);
