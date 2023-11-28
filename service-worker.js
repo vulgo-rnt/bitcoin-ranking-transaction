@@ -52,8 +52,7 @@ function createWs(txid, confirmations) {
 function sendMessageNotification(tx) {
   const options = {
     body: `
-    TxId : ${tx.hash}
-    Confirmations : ${tx.confirmations}`,
+    Confirmations Block : ${tx.confirmations}`,
   };
-  self.registration.showNotification("BTC TX SUCESSFULLY", options);
+  self.registration.showNotification("Approved Transaction", options);
 }
