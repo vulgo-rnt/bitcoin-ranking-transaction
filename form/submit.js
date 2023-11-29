@@ -2,13 +2,20 @@ createListItem();
 
 chrome.runtime.onMessage.addListener(({ error, sucessfully }) => {
   if (error) alert(error);
-  if (sucessfully) checkListItem(sucessfully.txid);
+  if (sucessfully) {
+    removeToList(sucessfully.txid);
+    createListItem();
+  }
 });
 
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
   const txid = document.querySelector("#txid").value;
   const confirmations = document.querySelector("#confirm").value;
+
+  checkListItem(txid);
+  createListItem();
+
   chrome.runtime.sendMessage({ txid, confirmations });
 });
 
@@ -20,8 +27,6 @@ function checkListItem(txid) {
     const data = JSON.stringify(storage);
     localStorage.setItem("txid", data);
   }
-
-  createListItem();
 }
 
 function createListItem() {
@@ -30,6 +35,9 @@ function createListItem() {
   listitem.children[0].innerHTML = "";
 
   const storage = JSON.parse(localStorage.getItem("txid"));
+  console.log(storage);
+
+  if (storage === null) return;
 
   storage.forEach((item) => {
     const itemElement = document.createElement("li");
@@ -50,4 +58,11 @@ function createListItem() {
 
     listitem.children[0].appendChild(itemElement);
   });
+}
+
+function removeToList(txid) {
+  const storage = JSON.parse(localStorage.getItem("txid"));
+  const index = storage.indexOf(txid);
+  storage.splice(index, 1);
+  localStorage.setItem("txid", JSON.stringify(storage));
 }

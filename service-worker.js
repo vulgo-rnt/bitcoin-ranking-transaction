@@ -7,20 +7,24 @@ chrome.runtime.onMessage.addListener(({ txid, confirmations }) => {
 function checkConfirmations(txid, confirmations) {
   if (previousTxId === txid) return;
 
-  previousTxId = txid;
-  fetch(`https://api.blockcypher.com/v1/btc/main/txs/${txid}`)
-    .then((data) => data.json())
-    .then((data) => {
-      if (data.error) {
-        chrome.runtime.sendMessage({ error: data.error });
-      } else if (data.confirmations >= confirmations) {
-        sendMessageNotification(data);
-        chrome.runtime.sendMessage({ sucessfully: { txid: data.hash } });
-      } else {
-        createWs(txid, confirmations);
-        chrome.runtime.sendMessage({ sucessfully: { txid: data.hash } });
-      }
-    });
+  setTimeout(() => {
+    chrome.runtime.sendMessage({ sucessfully: { txid: txid } });
+  }, 5000);
+
+  // previousTxId = txid;
+  // fetch(`https://api.blockcypher.com/v1/btc/main/txs/${txid}`)
+  //   .then((data) => data.json())
+  //   .then((data) => {
+  //     if (data.error) {
+  //       chrome.runtime.sendMessage({ error: data.error });
+  //     } else if (data.confirmations >= confirmations) {
+  //       sendMessageNotification(data);
+  //       chrome.runtime.sendMessage({ sucessfully: { txid: data.hash } });
+  //     } else {
+  //       createWs(txid, confirmations);
+  //       chrome.runtime.sendMessage({ sucessfully: { txid: data.hash } });
+  //     }
+  //   });
 }
 
 function createWs(txid, confirmations) {
