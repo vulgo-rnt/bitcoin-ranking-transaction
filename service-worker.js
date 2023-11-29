@@ -1,35 +1,38 @@
-let previousTxId;
+const previousData = { txix: "", confirmed: false };
 
 chrome.runtime.onMessage.addListener(({ txid, confirmations }) => {
   checkConfirmations(txid, confirmations);
 });
 
-function checkConfirmations(txid, confirmations) {
-  if (previousTxId === txid) return;
+async function checkConfirmations(txid, confirmations) {
+  if (previousData.txid === txid && previousData.confirmed === true) {
+    await removeToList(txid);
+    chrome.runtime.sendMessage({ error: "tx confirmed", reloadList: true });
+    return;
+  }
+  if (previousData.txid === txid) return;
 
-  setTimeout(() => {
-    chrome.runtime.sendMessage({ sucessfully: { txid: txid } });
-  }, 5000);
+  previousData.txid = txid;
+  previousData.confirmed = false;
 
-  // previousTxId = txid;
-  // fetch(`https://api.blockcypher.com/v1/btc/main/txs/${txid}`)
-  //   .then((data) => data.json())
-  //   .then((data) => {
-  //     if (data.error) {
-  //       chrome.runtime.sendMessage({ error: data.error });
-  //     } else if (data.confirmations >= confirmations) {
-  //       sendMessageNotification(data);
-  //       chrome.runtime.sendMessage({ sucessfully: { txid: data.hash } });
-  //     } else {
-  //       createWs(txid, confirmations);
-  //       chrome.runtime.sendMessage({ sucessfully: { txid: data.hash } });
-  //     }
-  //   });
+  fetch(`https://api.blockcypher.com/v1/btc/main/txs/${txid}`)
+    .then((data) => data.json())
+    .then(async (data) => {
+      if (data.error) {
+        await removeToList(txid);
+        chrome.runtime.sendMessage({ error: data.error, reloadList: true });
+      } else if (data.confirmations >= confirmations) {
+        previousData.confirmed = true;
+        sendMessageNotification(data);
+        chrome.runtime.sendMessage({ reloadList: true });
+      } else {
+        createWs(txid, confirmations);
+        chrome.runtime.sendMessage({ reloadList: true });
+      }
+    });
 }
 
 function createWs(txid, confirmations) {
-  if (txid === previousTxId) return;
-
   const ws = new WebSocket(
     `wss://socket.blockcypher.com/v1/btc/main?token=0a05df34698542dbba64d037419d3a5b`
   );
@@ -58,9 +61,21 @@ function createWs(txid, confirmations) {
 }
 
 function sendMessageNotification(tx) {
+  removeToList(tx.hash);
+  previousData.confirmed = true;
   const options = {
     body: `
     Confirmations Block : ${tx.confirmations}`,
   };
   self.registration.showNotification("Approved Transaction", options);
+}
+
+async function removeToList(txid) {
+  return new Promise(async (resolve) => {
+    const storage = await chrome.storage.local.get(["txid"]);
+    const index = storage.txid.indexOf(txid);
+    storage.txid.splice(index, 1);
+    await chrome.storage.local.set({ txid: storage.txid });
+    resolve();
+  });
 }

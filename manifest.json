@@ -7,7 +7,7 @@
     "default_popup": "form/index.html",
     "default_icon": "icons/index.png"
   },
-  "permissions": ["activeTab", "notifications"],
+  "permissions": ["activeTab", "notifications", "storage"],
   "background": {
     "service_worker": "service-worker.js"
   }

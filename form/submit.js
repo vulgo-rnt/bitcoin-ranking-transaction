@@ -1,45 +1,42 @@
 createListItem();
 
-chrome.runtime.onMessage.addListener(({ error, sucessfully }) => {
+chrome.runtime.onMessage.addListener(async ({ error, reloadList }) => {
   if (error) alert(error);
-  if (sucessfully) {
-    removeToList(sucessfully.txid);
-    createListItem();
-  }
+  if (reloadList) createListItem();
 });
 
-document.querySelector("form").addEventListener("submit", (event) => {
+document.querySelector("form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const txid = document.querySelector("#txid").value;
   const confirmations = document.querySelector("#confirm").value;
 
-  checkListItem(txid);
+  await checkListItem(txid);
   createListItem();
 
   chrome.runtime.sendMessage({ txid, confirmations });
 });
 
-function checkListItem(txid) {
-  const storage = JSON.parse(localStorage.getItem("txid")) || [];
-
-  if (!storage.includes(txid)) {
-    storage.push(txid);
-    const data = JSON.stringify(storage);
-    localStorage.setItem("txid", data);
-  }
+async function checkListItem(txid) {
+  return new Promise(async (resolve) => {
+    const storage = (await chrome.storage.local.get(["txid"])) ?? [];
+    if (!storage.txid.includes(txid)) {
+      storage.txid.push(txid);
+      await chrome.storage.local.set({ txid: storage.txid }, () => {
+        resolve();
+      });
+    }
+  });
 }
 
-function createListItem() {
+async function createListItem() {
   const listitem = document.querySelector("section");
   listitem.hidden = false;
   listitem.children[0].innerHTML = "";
 
-  const storage = JSON.parse(localStorage.getItem("txid"));
-  console.log(storage);
+  const storage = await chrome.storage.local.get(["txid"]);
+  if (!storage.txid) return;
 
-  if (storage === null) return;
-
-  storage.forEach((item) => {
+  storage.txid.forEach((item) => {
     const itemElement = document.createElement("li");
     itemElement.innerHTML = `${item.substring(0, 9)}...`;
     itemElement.id = item;
@@ -58,11 +55,4 @@ function createListItem() {
 
     listitem.children[0].appendChild(itemElement);
   });
-}
-
-function removeToList(txid) {
-  const storage = JSON.parse(localStorage.getItem("txid"));
-  const index = storage.indexOf(txid);
-  storage.splice(index, 1);
-  localStorage.setItem("txid", JSON.stringify(storage));
 }
