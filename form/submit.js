@@ -38,20 +38,19 @@ async function createListItem() {
 
   storage.txid.forEach((item) => {
     const itemElement = document.createElement("li");
-    itemElement.innerHTML = `${item.substring(0, 9)}...`;
+    itemElement.innerHTML = `${item.substring(0, 35)}...`;
     itemElement.id = item;
 
-    // const buttonElement = document.createElement("button");
-    // buttonElement.addEventListener("click", (event) => {
-    //   const storage = JSON.parse(localStorage.getItem("txid"));
-    //   const index = storage.indexOf(event.target.id);
-    //   storage.splice(index, 1);
+    const buttonElement = document.createElement("button");
+    buttonElement.className = "btnItem";
+    buttonElement.innerHTML = "X";
+    buttonElement.addEventListener("click", () => {
+      const newStorage = storage.txid.filter((value) => value !== item);
+      chrome.storage.local.set({ txid: newStorage });
+      createListItem();
+    });
 
-    //   localStorage.setItem("txid", JSON.stringify(storage));
-    //   console.log(event);
-    // });
-
-    // itemElement.appendChild(buttonElement);
+    itemElement.appendChild(buttonElement);
 
     listitem.children[0].appendChild(itemElement);
   });
