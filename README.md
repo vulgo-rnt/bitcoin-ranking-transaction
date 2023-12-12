@@ -18,6 +18,6 @@ Chrome extension that notifies when a bitcoin transaction is confirmed
   3. Enable Developer Mode by clicking the toggle switch next to __Developer mode__.
   4. Click the Load unpacked button and select the extension directory
 
-  ![enter manage extension and unpacked extension](https://developer.chrome.com/static/docs/extensions/get-started/tutorial/hello-world/image/extensions-page-e0d64d89a6acf_856.png)
+  <img src="https://developer.chrome.com/static/docs/extensions/get-started/tutorial/hello-world/image/extensions-page-e0d64d89a6acf_856.png" height="300">
 
   5. Now Watch Btc Tx is available in extensions
